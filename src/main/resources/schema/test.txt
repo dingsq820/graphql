@@ -1,0 +1,70 @@
+{
+	books{
+    id
+    name
+    pageCount
+    author{
+      authorName
+    }
+    
+  }
+}
+
+{
+	book(id:"3") {
+    id
+    name
+    pageCount
+    author {
+      age
+      sex
+      authorName
+    }
+  }
+}
+
+{
+	authors{
+    id
+    age
+    sex
+    authorName
+    
+  }
+}
+
+{
+	author(id:"2"){
+    id
+    age
+    sex
+    authorName
+    
+  }
+}
+
+
+{
+	booksOfAuthorById(id:1){
+    id
+    name
+    pageCount
+  }
+}
+
+mutation addBook($bookInput : BookInput) {
+  addBook(input : $bookInput) {
+    id
+    name
+  }
+}
+
+{
+  "bookInput": {
+    "bookName": "testBook",
+    "pageCount": 123,
+    "authorId": 2
+  }
+}
+
+
