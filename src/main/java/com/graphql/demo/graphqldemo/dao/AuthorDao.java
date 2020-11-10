@@ -34,4 +34,25 @@ public interface AuthorDao {
 	 * @return the list of Author
 	 */
 	public List<Author> getAuthorsByIds(List<String> ids);
+
+	/**
+	 * Add Author
+	 * 
+	 * @param author
+	 */
+	public void addAuthor(Author author);
+
+	/**
+	 * Update Author
+	 * 
+	 * @param author
+	 */
+	public void updateAuthor(Author author);
+
+	/**
+	 * Delete Author
+	 * 
+	 * @param id
+	 */
+	public void deleteAuthor(@Param("id") String id);
 }

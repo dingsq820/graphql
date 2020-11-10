@@ -49,4 +49,11 @@ public interface BookDao {
 	 * @param book
 	 */
 	public void updateBook(Book book);
+
+	/**
+	 * Delete Book
+	 * 
+	 * @param id
+	 */
+	public void deleteBook(@Param("id") String id);
 }

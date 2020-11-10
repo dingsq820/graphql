@@ -20,7 +20,7 @@ public class AuthorLoader {
 
 	public DataLoader<String, Author> dataLoader;
 
-	public void mmm() {
+	public AuthorLoader() {
 		BatchLoader<String, Author> authorBatchLoader = new BatchLoader<String, Author>() {
 
 			@Override

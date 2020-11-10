@@ -23,10 +23,20 @@ type Query {
 type Mutation {
 	addBook(input : BookInput) : Book
 	updateBook(id : ID!, input : BookInput!):Book
+	deleteBook(id : ID!) : Book
+	addAuthor(input : AuthorInput) : Author
+	updateAuthor(id : ID!, input : AuthorInput!) : Author
+	deleteAuthor(id : ID!) : Author
 }
 
 input BookInput {
-	bookName : String!
-	pageCount : Int!
-	authorId : Int!
+	bookName : String
+	pageCount : Int
+	authorId : Int
+}
+
+input AuthorInput {
+	age : Int
+	sex : String
+	authorName : String
 }

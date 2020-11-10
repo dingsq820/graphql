@@ -1,30 +1,25 @@
 package com.graphql.demo.graphqldemo.controller;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
-import org.dataloader.BatchLoader;
-import org.dataloader.DataLoader;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.graphql.demo.graphqldemo.dao.AuthorDao;
 import com.graphql.demo.graphqldemo.dataLoader.AuthorLoader;
-import com.graphql.demo.graphqldemo.dto.Author;
 
 import graphql.ExecutionInput;
+import graphql.ExecutionResult;
 import graphql.GraphQL;
 
-@CrossOrigin
+/**
+ * GraphQL Controller
+ *
+ */
 @RestController
 @RequestMapping("/graphql")
 public class GraphQLController {
@@ -32,23 +27,18 @@ public class GraphQLController {
 	@Autowired
 	private AuthorLoader authorLoader;
 
-	@Autowired
-	AuthorDao authorDao;
-
 	private final GraphQL graphql;
-	private final ObjectMapper objectMapper;
 
 	@Autowired
-	public GraphQLController(GraphQL graphql, ObjectMapper objectMapper) {
+	public GraphQLController(GraphQL graphql) {
 		this.graphql = graphql;
-		this.objectMapper = objectMapper;
 	}
 
 	/**
-	 * POST方式查询
-	 *
-	 * @param body json对象方式
-	 * @return map对象
+	 * POST METHOD
+	 * 
+	 * @param body
+	 * @return
 	 */
 	@PostMapping
 	public Map<String, Object> graphqlPOST(@RequestBody Map<String, Object> body) {
@@ -67,26 +57,28 @@ public class GraphQLController {
 	}
 
 	/**
-	 * 执行graphQL查询
+	 * GraphQL Execute
 	 *
-	 * @param query         查询语句-类json字符
-	 * @param operationName 查询操作名称-默认空字符
-	 * @param variables     查询参数变量-map对象、默认为空map
-	 * @return map对象
+	 * @param query         Query
+	 * @param operationName OperationName
+	 * @param variables     Variables
+	 * @return ResultMap
 	 */
 	private Map<String, Object> executeGraphqlQuery(String query, String operationName, Map<String, Object> variables) {
 
 		DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
-		
-		authorLoader.mmm();
-		dataLoaderRegistry.register("", authorLoader.dataLoader);
-
+		dataLoaderRegistry.register("authorLoader", authorLoader.dataLoader);
 		ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query)
 				.dataLoaderRegistry(dataLoaderRegistry).operationName(operationName).variables(variables).build();
 
-		return graphql.execute(executionInput).toSpecification();
+//		ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query)
+//				.operationName(operationName).variables(variables).build();
+		ExecutionResult executionResult = graphql.execute(executionInput);
+		Map<String, Object> resultMap = executionResult.toSpecification();
+		if (resultMap.containsKey("extensions")) {
+			resultMap.remove("extensions");
+		}
+		return resultMap;
 	}
-
-	
 
 }

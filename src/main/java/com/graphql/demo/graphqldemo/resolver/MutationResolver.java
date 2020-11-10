@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.graphql.demo.graphqldemo.dao.AuthorDao;
 import com.graphql.demo.graphqldemo.dao.BookDao;
+import com.graphql.demo.graphqldemo.dto.Author;
 import com.graphql.demo.graphqldemo.dto.Book;
+import com.graphql.demo.graphqldemo.model.AuthorInput;
 import com.graphql.demo.graphqldemo.model.BookInput;
 
 import lombok.AllArgsConstructor;
@@ -63,6 +65,78 @@ public class MutationResolver implements GraphQLMutationResolver {
 		// Update Book
 		bookDao.updateBook(book);
 
+		return bookDao.getBookById(book.getId());
+	}
+
+	/**
+	 * Delete Book
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Book deleteBook(Integer id) {
+		Book book = bookDao.getBookById(String.valueOf(id));
+		bookDao.deleteBook(String.valueOf(id));
 		return book;
+	}
+
+	/**
+	 * Add Author
+	 * 
+	 * @param authorInput
+	 * @return The New Author
+	 */
+	public Author addAuthor(AuthorInput authorInput) {
+		Author author = new Author();
+		author.setAge(authorInput.getAge());
+		author.setSex(authorInput.getSex());
+		author.setAuthorName(authorInput.getAuthorName());
+
+		authorDao.addAuthor(author);
+
+		Integer id = author.getId();
+		Author newAuthor = authorDao.getAuthorById(String.valueOf(id));
+		return newAuthor;
+	}
+
+	/**
+	 * Update Author
+	 * 
+	 * @param id          AuthorId
+	 * @param authorInput
+	 * @return The New Author
+	 */
+	public Author updateAuthor(Integer id, AuthorInput authorInput) {
+
+		Author oldAuthor = authorDao.getAuthorById(String.valueOf(id));
+
+		if (authorInput.getAge() != null) {
+			oldAuthor.setAge(authorInput.getAge());
+		}
+
+		if (StringUtils.isNotEmpty(authorInput.getSex())) {
+			oldAuthor.setSex(authorInput.getSex());
+		}
+
+		if (StringUtils.isNotEmpty(authorInput.getAuthorName())) {
+			oldAuthor.setAuthorName(authorInput.getAuthorName());
+		}
+
+		authorDao.updateAuthor(oldAuthor);
+
+		Author newAuthor = authorDao.getAuthorById(String.valueOf(oldAuthor.getId()));
+		return newAuthor;
+	}
+
+	/**
+	 * Delete Author
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Author deleteAuthor(Integer id) {
+		Author author = authorDao.getAuthorById(String.valueOf(id));
+		authorDao.deleteAuthor(String.valueOf(id));
+		return author;
 	}
 }

@@ -1,23 +1,14 @@
 package com.graphql.demo.graphqldemo.provider;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 import javax.annotation.PostConstruct;
 
-import org.dataloader.BatchLoader;
-import org.dataloader.DataLoader;
-import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.coxautodev.graphql.tools.SchemaParser;
-import com.graphql.demo.graphqldemo.dao.AuthorDao;
-import com.graphql.demo.graphqldemo.dataLoader.AuthorLoader;
-import com.graphql.demo.graphqldemo.dto.Author;
 import com.graphql.demo.graphqldemo.resolver.BookResolver;
 import com.graphql.demo.graphqldemo.resolver.MutationResolver;
 import com.graphql.demo.graphqldemo.resolver.QueryResolver;
@@ -41,7 +32,6 @@ public class GraphQLProvider {
 	@Autowired
 	private MutationResolver mutationResolver;
 
-
 	@Bean
 	public GraphQL graphQL() {
 		return graphQL;
@@ -62,7 +52,5 @@ public class GraphQLProvider {
 		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation).build();
 
 	}
-
-	
 
 }

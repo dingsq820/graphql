@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where del_flg = 0 and id = #{id}
 
 	</select>
-	
+
 	<select id="getAuthorsByIds" parameterType="java.util.List"
 		resultType="com.graphql.demo.graphqldemo.dto.Author"
 		resultMap="authorResultMap">
@@ -31,7 +31,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select
 		*
 		from author
-		where del_flg = 0 and id in (1,2)
+		where del_flg = 0 and id in
+		
+		<foreach item="item" collection="list" separator="," open="(" close=")" index="">
+			#{item}
+		</foreach>
 
 	</select>
 
@@ -44,5 +48,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where del_flg = 0
 
 	</select>
+
+
+	<insert id="addAuthor" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.graphql.demo.graphqldemo.dto.Author">
+		insert into author(age, sex, author_name, del_flg)
+		values (#{age}, #{sex}, #{authorName}, 0)
+	</insert>
+
+	<update id="updateAuthor" useGeneratedKeys="true"
+		keyProperty="id"
+		parameterType="com.graphql.demo.graphqldemo.dto.Author">
+		update author set age = #{age}, sex = #{sex},
+		author_name = #{authorName} where id =
+		#{id}
+	</update>
+	
+	<update id="deleteAuthor" useGeneratedKeys="true"
+		keyProperty="id"
+		parameterType="java.lang.String">
+		update author set del_flg = 1 where id = #{id};
+		update book set del_flg = 1 where author_id = #{id};
+	</update>
 
 </mapper>
