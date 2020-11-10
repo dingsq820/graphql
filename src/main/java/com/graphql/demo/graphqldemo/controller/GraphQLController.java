@@ -1,8 +1,14 @@
 package com.graphql.demo.graphqldemo.controller;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
+import org.dataloader.BatchLoader;
+import org.dataloader.DataLoader;
+import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.graphql.demo.graphqldemo.dao.BookDao;
+import com.graphql.demo.graphqldemo.dao.AuthorDao;
+import com.graphql.demo.graphqldemo.dataLoader.AuthorLoader;
+import com.graphql.demo.graphqldemo.dto.Author;
 
 import graphql.ExecutionInput;
 import graphql.GraphQL;
@@ -22,7 +30,10 @@ import graphql.GraphQL;
 public class GraphQLController {
 
 	@Autowired
-	BookDao bookDao;
+	private AuthorLoader authorLoader;
+
+	@Autowired
+	AuthorDao authorDao;
 
 	private final GraphQL graphql;
 	private final ObjectMapper objectMapper;
@@ -46,10 +57,12 @@ public class GraphQLController {
 			query = "";
 		}
 		String operationName = (String) body.get("operationName");
+		@SuppressWarnings("unchecked")
 		Map<String, Object> variables = (Map<String, Object>) body.get("variables");
 		if (variables == null) {
 			variables = new LinkedHashMap<>();
 		}
+
 		return executeGraphqlQuery(query, operationName, variables);
 	}
 
@@ -62,9 +75,18 @@ public class GraphQLController {
 	 * @return map对象
 	 */
 	private Map<String, Object> executeGraphqlQuery(String query, String operationName, Map<String, Object> variables) {
-		ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query).operationName(operationName)
-				.variables(variables).build();
+
+		DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
+		
+		authorLoader.mmm();
+		dataLoaderRegistry.register("", authorLoader.dataLoader);
+
+		ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query)
+				.dataLoaderRegistry(dataLoaderRegistry).operationName(operationName).variables(variables).build();
+
 		return graphql.execute(executionInput).toSpecification();
 	}
+
+	
 
 }

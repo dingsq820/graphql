@@ -23,6 +23,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where del_flg = 0 and id = #{id}
 
 	</select>
+	
+	<select id="getAuthorsByIds" parameterType="java.util.List"
+		resultType="com.graphql.demo.graphqldemo.dto.Author"
+		resultMap="authorResultMap">
+
+		select
+		*
+		from author
+		where del_flg = 0 and id in (1,2)
+
+	</select>
 
 	<select id="getAllAuthors" resultType="java.util.List"
 		resultMap="authorResultMap">

@@ -26,4 +26,12 @@ public interface AuthorDao {
 	 * @return the list of Author
 	 */
 	public List<Author> getAllAuthors();
+
+	/**
+	 * Get Authors Info By Author Ids
+	 * 
+	 * @param ids
+	 * @return the list of Author
+	 */
+	public List<Author> getAuthorsByIds(List<String> ids);
 }

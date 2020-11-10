@@ -1,19 +1,30 @@
 package com.graphql.demo.graphqldemo.provider;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import javax.annotation.PostConstruct;
 
+import org.dataloader.BatchLoader;
+import org.dataloader.DataLoader;
+import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.coxautodev.graphql.tools.SchemaParser;
+import com.graphql.demo.graphqldemo.dao.AuthorDao;
+import com.graphql.demo.graphqldemo.dataLoader.AuthorLoader;
+import com.graphql.demo.graphqldemo.dto.Author;
 import com.graphql.demo.graphqldemo.resolver.BookResolver;
 import com.graphql.demo.graphqldemo.resolver.MutationResolver;
 import com.graphql.demo.graphqldemo.resolver.QueryResolver;
 
 import graphql.GraphQL;
+import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentation;
+import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentationOptions;
 import graphql.schema.GraphQLSchema;
 
 @Component
@@ -26,9 +37,10 @@ public class GraphQLProvider {
 
 	@Autowired
 	private BookResolver bookResolver;
-	
+
 	@Autowired
 	private MutationResolver mutationResolver;
+
 
 	@Bean
 	public GraphQL graphQL() {
@@ -39,10 +51,18 @@ public class GraphQLProvider {
 	public void init() throws IOException {
 
 		GraphQLSchema schema = SchemaParser.newParser().file("schema/schema.graphql")
-				.resolvers(queryResolver, bookResolver,mutationResolver).build().makeExecutableSchema();
+				.resolvers(queryResolver, bookResolver, mutationResolver).build().makeExecutableSchema();
 
-		this.graphQL = GraphQL.newGraphQL(schema).build();
+		DataLoaderDispatcherInstrumentationOptions options = DataLoaderDispatcherInstrumentationOptions.newOptions()
+				.includeStatistics(true);
+
+		DataLoaderDispatcherInstrumentation dispatcherInstrumentation = new DataLoaderDispatcherInstrumentation(
+				options);
+
+		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation).build();
 
 	}
+
+	
 
 }
