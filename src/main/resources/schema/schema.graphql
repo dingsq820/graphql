@@ -40,3 +40,8 @@ input AuthorInput {
 	sex : String
 	authorName : String
 }
+
+#type Subscription {
+#	newBookAdded : Book
+#}
+

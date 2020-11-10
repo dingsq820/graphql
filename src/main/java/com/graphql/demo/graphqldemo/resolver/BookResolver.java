@@ -2,25 +2,19 @@ package com.graphql.demo.graphqldemo.resolver;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.dataloader.DataLoader;
 import org.springframework.stereotype.Component;
 
 import com.coxautodev.graphql.tools.GraphQLResolver;
-import com.graphql.demo.graphqldemo.dataLoader.AuthorLoader;
 import com.graphql.demo.graphqldemo.dto.Author;
 import com.graphql.demo.graphqldemo.dto.Book;
 
+import graphql.schema.DataFetchingEnvironment;
 import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
 public class BookResolver implements GraphQLResolver<Book> {
-
-//	@Autowired
-//	AuthorDao authorDao;
-
-	@Autowired
-	private AuthorLoader authorLoader;
 
 	/**
 	 * Add The Key to Loader.
@@ -28,9 +22,13 @@ public class BookResolver implements GraphQLResolver<Book> {
 	 * @param book
 	 * @return
 	 */
-	public CompletableFuture<Author> author(Book book) {
+	public CompletableFuture<Author> author(Book book, DataFetchingEnvironment dataFetchingEnvironment) {
 
-		return authorLoader.dataLoader.load(String.valueOf(book.getAuthorId()));
+		DataLoader<String, Author> authorDataLoader = dataFetchingEnvironment.getDataLoaderRegistry()
+				.getDataLoader("authorLoader");
+		return authorDataLoader.load(String.valueOf(book.getAuthorId()));
+
+//		return authorLoader.dataLoader.load(String.valueOf(book.getAuthorId()));
 	}
 
 //	public Author author(Book book) {

@@ -3,14 +3,13 @@ package com.graphql.demo.graphqldemo.controller;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.graphql.demo.graphqldemo.dataLoader.AuthorLoader;
+import com.graphql.demo.graphqldemo.dataLoader.DataLoaderInit;
 
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
@@ -25,7 +24,7 @@ import graphql.GraphQL;
 public class GraphQLController {
 
 	@Autowired
-	private AuthorLoader authorLoader;
+	private DataLoaderInit dataLoaderInit;
 
 	private final GraphQL graphql;
 
@@ -66,14 +65,50 @@ public class GraphQLController {
 	 */
 	private Map<String, Object> executeGraphqlQuery(String query, String operationName, Map<String, Object> variables) {
 
-		DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
-		dataLoaderRegistry.register("authorLoader", authorLoader.dataLoader);
+//		DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
+//		dataLoaderRegistry.register("authorLoader", dataLoaderInit.initDataLoaderRegistry());
 		ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query)
-				.dataLoaderRegistry(dataLoaderRegistry).operationName(operationName).variables(variables).build();
+				.dataLoaderRegistry(dataLoaderInit.initDataLoaderRegistry()).operationName(operationName).variables(variables).build();
 
 //		ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query)
 //				.operationName(operationName).variables(variables).build();
 		ExecutionResult executionResult = graphql.execute(executionInput);
+		// ----start----
+//		Publisher<ExecutionResult> newBookAddStream = executionResult.getData();
+//		AtomicReference<Subscription> atomicReference = new AtomicReference<>();
+//		newBookAddStream.subscribe(new Subscriber<ExecutionResult>() {
+//
+//			@Override
+//			public void onSubscribe(Subscription s) {
+//
+//				atomicReference.set(s);
+//				s.request(1);
+//
+//			}
+//
+//			@Override
+//			public void onNext(ExecutionResult t) {
+//				// TODO
+//
+//				atomicReference.get().request(1);
+//
+//			}
+//
+//			@Override
+//			public void onError(Throwable t) {
+//
+//				System.out.println("Subscription threw an exception" + t.toString());
+//				
+//
+//			}
+//
+//			@Override
+//			public void onComplete() {
+//				System.out.println("Subscription Complete");
+//
+//			}
+//		});
+		// ----end----
 		Map<String, Object> resultMap = executionResult.toSpecification();
 		if (resultMap.containsKey("extensions")) {
 			resultMap.remove("extensions");

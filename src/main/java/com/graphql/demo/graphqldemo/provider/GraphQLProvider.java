@@ -14,6 +14,7 @@ import com.graphql.demo.graphqldemo.resolver.MutationResolver;
 import com.graphql.demo.graphqldemo.resolver.QueryResolver;
 
 import graphql.GraphQL;
+import graphql.execution.SubscriptionExecutionStrategy;
 import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentation;
 import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentationOptions;
 import graphql.schema.GraphQLSchema;
@@ -41,7 +42,8 @@ public class GraphQLProvider {
 	public void init() throws IOException {
 
 		GraphQLSchema schema = SchemaParser.newParser().file("schema/schema.graphql")
-				.resolvers(queryResolver, bookResolver, mutationResolver).build().makeExecutableSchema();
+				.resolvers(queryResolver, bookResolver, mutationResolver).build()
+				.makeExecutableSchema();
 
 		DataLoaderDispatcherInstrumentationOptions options = DataLoaderDispatcherInstrumentationOptions.newOptions()
 				.includeStatistics(true);
@@ -49,7 +51,10 @@ public class GraphQLProvider {
 		DataLoaderDispatcherInstrumentation dispatcherInstrumentation = new DataLoaderDispatcherInstrumentation(
 				options);
 
-		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation).build();
+//		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation).build();
+
+		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation)
+				.subscriptionExecutionStrategy(new SubscriptionExecutionStrategy()).build();
 
 	}
 
