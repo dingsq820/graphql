@@ -3,6 +3,8 @@ package com.graphql.demo.graphqldemo.resolver;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.graphql.demo.graphqldemo.dao.AuthorDao;
@@ -30,6 +32,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 	 * @param bookInput
 	 * @return The New Book
 	 */
+	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public Book addBook(BookInput bookInput) {
 		Book book = new Book();
 		book.setName(bookInput.getBookName());
@@ -49,6 +52,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 	 * @param bookInput
 	 * @return The New Book
 	 */
+	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public Book updateBook(Integer id, BookInput bookInput) {
 
 		// Get Old Book
@@ -65,7 +69,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 		// Update Book
 		bookDao.updateBook(book);
 
-		return bookDao.getBookById(book.getId());
+		return book;
 	}
 
 	/**
@@ -74,6 +78,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 	 * @param id
 	 * @return
 	 */
+	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public Book deleteBook(Integer id) {
 		Book book = bookDao.getBookById(String.valueOf(id));
 		bookDao.deleteBook(String.valueOf(id));
@@ -86,6 +91,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 	 * @param authorInput
 	 * @return The New Author
 	 */
+	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public Author addAuthor(AuthorInput authorInput) {
 		Author author = new Author();
 		author.setAge(authorInput.getAge());
@@ -106,6 +112,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 	 * @param authorInput
 	 * @return The New Author
 	 */
+	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public Author updateAuthor(Integer id, AuthorInput authorInput) {
 
 		Author oldAuthor = authorDao.getAuthorById(String.valueOf(id));
@@ -134,6 +141,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 	 * @param id
 	 * @return
 	 */
+	@Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_COMMITTED)
 	public Author deleteAuthor(Integer id) {
 		Author author = authorDao.getAuthorById(String.valueOf(id));
 		authorDao.deleteAuthor(String.valueOf(id));
