@@ -27,11 +27,5 @@ public class BookResolver implements GraphQLResolver<Book> {
 		DataLoader<String, Author> authorDataLoader = dataFetchingEnvironment.getDataLoaderRegistry()
 				.getDataLoader("authorLoader");
 		return authorDataLoader.load(String.valueOf(book.getAuthorId()));
-
-//		return authorLoader.dataLoader.load(String.valueOf(book.getAuthorId()));
 	}
-
-//	public Author author(Book book) {
-//		return authorDao.getAuthorById(String.valueOf(book.getAuthorId()));
-//	}
 }

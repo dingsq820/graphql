@@ -17,34 +17,65 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class QueryResolver implements GraphQLQueryResolver {
 
+	// Book DAO
 	@Autowired
 	BookDao bookDao;
-	
+
+	// Author DAO
 	@Autowired
 	AuthorDao authorDao;
-	
-	public Book book(String id) {
-		
+
+	/**
+	 * Get Book
+	 * 
+	 * @param id BookID
+	 * @return Book
+	 */
+	public Book getBook(String id) {
+
 		Book book = bookDao.getBookById(id);
 		return book;
 	}
-	
-	public List<Book> books() {
-		
+
+	/**
+	 * Get Books
+	 * 
+	 * @return Books
+	 */
+	public List<Book> getBooks() {
+
 		return bookDao.getAllBooks();
 	}
-	
-	public Author author(String id) {
-		
+
+	/**
+	 * Get Author
+	 * 
+	 * @param id AuthorID
+	 * @return Author
+	 */
+	public Author getAuthor(String id) {
+
 		return authorDao.getAuthorById(id);
 	}
-	
-	public List<Author> authors() {
-		
-		return authorDao.getAllAuthors();
+
+	/**
+	 * Get Authors
+	 * 
+	 * @return Authors
+	 */
+	public List<Author> getAuthors() {
+
+		List<Author> authors = authorDao.getAllAuthors();
+		return authors;
 	}
 
-	public List<Book> booksOfAuthorById(String id) {
+	/**
+	 * Get Books of Author By Author ID
+	 * 
+	 * @param id AuthorID
+	 * @return Books
+	 */
+	public List<Book> getBooksOfAuthorById(String id) {
 		return bookDao.getAllBooksOfAuthorById(id);
 	}
 }

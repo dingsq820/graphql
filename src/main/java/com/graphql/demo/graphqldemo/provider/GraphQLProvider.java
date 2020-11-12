@@ -9,12 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.coxautodev.graphql.tools.SchemaParser;
+import com.graphql.demo.graphqldemo.resolver.AuthorResolver;
 import com.graphql.demo.graphqldemo.resolver.BookResolver;
 import com.graphql.demo.graphqldemo.resolver.MutationResolver;
 import com.graphql.demo.graphqldemo.resolver.QueryResolver;
+import com.graphql.demo.graphqldemo.resolver.SubscriptionResolver;
 
 import graphql.GraphQL;
-import graphql.execution.SubscriptionExecutionStrategy;
 import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentation;
 import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentationOptions;
 import graphql.schema.GraphQLSchema;
@@ -25,6 +26,9 @@ public class GraphQLProvider {
 	private GraphQL graphQL;
 
 	@Autowired
+	private AuthorResolver authorResolver;
+
+	@Autowired
 	private QueryResolver queryResolver;
 
 	@Autowired
@@ -32,6 +36,9 @@ public class GraphQLProvider {
 
 	@Autowired
 	private MutationResolver mutationResolver;
+
+	@Autowired
+	private SubscriptionResolver subscriptionResolver;
 
 	@Bean
 	public GraphQL graphQL() {
@@ -42,7 +49,7 @@ public class GraphQLProvider {
 	public void init() throws IOException {
 
 		GraphQLSchema schema = SchemaParser.newParser().file("schema/schema.graphql")
-				.resolvers(queryResolver, bookResolver, mutationResolver).build()
+				.resolvers(queryResolver, bookResolver, authorResolver, mutationResolver, subscriptionResolver).build()
 				.makeExecutableSchema();
 
 		DataLoaderDispatcherInstrumentationOptions options = DataLoaderDispatcherInstrumentationOptions.newOptions()
@@ -51,10 +58,10 @@ public class GraphQLProvider {
 		DataLoaderDispatcherInstrumentation dispatcherInstrumentation = new DataLoaderDispatcherInstrumentation(
 				options);
 
-//		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation).build();
+		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation).build();
 
-		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation)
-				.subscriptionExecutionStrategy(new SubscriptionExecutionStrategy()).build();
+//		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation)
+//				.subscriptionExecutionStrategy(new SubscriptionExecutionStrategy()).build();
 
 	}
 

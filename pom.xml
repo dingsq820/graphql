@@ -57,6 +57,11 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+<!-- https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava -->
+<dependency>
+    <groupId>io.reactivex.rxjava2</groupId>
+    <artifactId>rxjava</artifactId>
+    </dependency>
 
 	</dependencies>
 

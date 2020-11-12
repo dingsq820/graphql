@@ -11,6 +11,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="sex" column="sex" />
 		<result property="authorName" column="author_name" />
 		<result property="delFlg" column="del_flg" />
+		<!-- <collection property="books" ofType="com.graphql.demo.graphqldemo.dto.Book">
+			<id property="id" column="book_id" />
+			<result property="name" column="name" />
+			<result property="pageCount" column="page_count" />
+			<result property="authorId" column="author_id" />
+			<result property="delFlg" column="del_flg" />
+		</collection> -->
 	</resultMap>
 
 	<select id="getAuthorById" parameterType="java.lang.String"
@@ -42,10 +49,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getAllAuthors" resultType="java.util.List"
 		resultMap="authorResultMap">
 
-		select
-		*
+		<!-- select
+		A.*,B.id as book_id,B.name,B.page_count,B.author_id,B.del_flg
+		from author A left join book B on A.id = B.author_id and B.del_flg = 0
+		where A.del_flg = 0 -->
+		
+		select *
 		from author
-		where del_flg = 0
+		where del_flg = 0;
 
 	</select>
 

@@ -1,5 +1,7 @@
 package com.graphql.demo.graphqldemo.dto;
 
+import java.util.List;
+
 public class Author {
 
 	private Integer id;
@@ -11,6 +13,8 @@ public class Author {
 	private String authorName;
 
 	private Integer delFlg;
+
+	private List<Book> books;
 
 	public Integer getId() {
 		return id;
@@ -52,4 +56,11 @@ public class Author {
 		this.delFlg = delFlg;
 	}
 
+	public List<Book> getBooks() {
+		return books;
+	}
+
+	public void setBooks(List<Book> books) {
+		this.books = books;
+	}
 }

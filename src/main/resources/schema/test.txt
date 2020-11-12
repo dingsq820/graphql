@@ -1,6 +1,6 @@
 #Get All Books
 {
-	books{
+	getBooks{
     id
     name
     pageCount
@@ -13,7 +13,7 @@
 
 #Get Book By Id
 {
-	book(id:"3") {
+	getBook(id:"3") {
     id
     name
     pageCount
@@ -27,23 +27,29 @@
 
 #Get All Authors
 {
-	authors{
+	getAuthors{
     id
     age
     sex
     authorName
-    
+    books{
+      name
+      pageCount
+    }
   }
 }
 
 #Get Author By Id
 {
-	author(id:"2"){
+	getAuthor(id:"2"){
     id
     age
     sex
     authorName
-    
+    books{
+      name
+      pageCount
+    }
   }
 }
 

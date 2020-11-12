@@ -10,14 +10,16 @@ type Author {
 	age : Int
 	sex : String
 	authorName : String
+	books : [Book]
 }
 
 type Query {
-	book(id: ID!) : Book
-	books : [Book]
-	author(id: ID!) : Author
-	authors : [Author]
-	booksOfAuthorById(id : ID!) : [Book]
+	getBook(id: ID!) : Book
+	getBooks : [Book]
+	getAuthor(id: ID!) : Author
+	getAuthors : [Author]
+	getBooksOfAuthorById(id : ID!) : [Book]
+	#getAuthors : [AuthorBook]
 }
 
 type Mutation {
@@ -26,7 +28,7 @@ type Mutation {
 	deleteBook(id : ID!) : Book
 	addAuthor(input : AuthorInput) : Author
 	updateAuthor(id : ID!, input : AuthorInput!) : Author
-	deleteAuthor(id : ID!) : Author
+	#deleteAuthor(id : ID!) : Author
 }
 
 input BookInput {
@@ -41,7 +43,12 @@ input AuthorInput {
 	authorName : String
 }
 
-#type Subscription {
-#	newBookAdded : Book
+#input AuthorBook {
+#	author : Author
+#	books : [Book]
 #}
+
+type Subscription {
+	newBookAdded : Book
+}
 

@@ -1,8 +1,10 @@
 package com.graphql.demo.graphqldemo.dataLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 
 import org.dataloader.BatchLoader;
 import org.dataloader.DataLoader;
@@ -11,22 +13,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.graphql.demo.graphqldemo.dao.AuthorDao;
+import com.graphql.demo.graphqldemo.dao.BookDao;
 import com.graphql.demo.graphqldemo.dto.Author;
+import com.graphql.demo.graphqldemo.dto.Book;
 
 @Component
 public class DataLoaderInit {
 
 	// Author Dao
 	@Autowired
-	AuthorDao authorDao;
+	private AuthorDao authorDao;
+
+	// Book DAO
+	@Autowired
+	private BookDao bookDao;
 
 	// Data Loader Registry
-	private DataLoaderRegistry dataLoaderRegistry;
+
+	private DataLoaderRegistry dataLoaderRegistry = new DataLoaderRegistry();
 
 	public DataLoaderRegistry initDataLoaderRegistry() {
 
 		DataLoader<String, Author> authorDataLoader = this.initAuthorLoader();
 		dataLoaderRegistry.register("authorLoader", authorDataLoader);
+
+		DataLoader<String, List<Book>> bookDataLoader = this.initBookLoader();
+		dataLoaderRegistry.register("bookLoader", bookDataLoader);
 		return this.dataLoaderRegistry;
 	}
 
@@ -46,8 +58,40 @@ public class DataLoaderInit {
 			}
 		};
 
-		DataLoader<String, Author> userLoader = DataLoader.newDataLoader(authorBatchLoader);
+		DataLoader<String, Author> authorLoader = DataLoader.newDataLoader(authorBatchLoader);
 
-		return userLoader;
+		return authorLoader;
+	}
+
+	/**
+	 * Init Book Data Loader
+	 * 
+	 * @return Book Data Loader
+	 */
+	private DataLoader<String, List<Book>> initBookLoader() {
+
+		BatchLoader<String, List<Book>> bookBatchLoader = new BatchLoader<String, List<Book>>() {
+
+			@Override
+			public CompletableFuture<List<List<Book>>> load(List<String> keys) {
+
+				return CompletableFuture.supplyAsync(() -> {
+					List<List<Book>> reBooks = new ArrayList<>();
+					List<Book> books = bookDao.getAllBooksOfAuthorByIds(keys);
+					for (String key : keys) {
+						List<Book> tmpBooks = books.stream()
+								.filter(book -> key.equals(String.valueOf(book.getAuthorId())))
+								.collect(Collectors.toList());
+						reBooks.add(tmpBooks);
+					}
+
+					return reBooks;
+				});
+			}
+		};
+
+		DataLoader<String, List<Book>> bookLoader = DataLoader.newDataLoader(bookBatchLoader);
+
+		return bookLoader;
 	}
 }

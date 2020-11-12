@@ -35,6 +35,9 @@ public interface BookDao {
 	 */
 	public List<Book> getAllBooksOfAuthorById(@Param("id") String id);
 
+	
+	public List<Book> getAllBooksOfAuthorByIds(List<String> authorIds);
+	
 	/**
 	 * Add Book
 	 * 

@@ -12,38 +12,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="pageCount" column="page_count" />
 		<result property="authorId" column="author_id" />
 		<result property="delFlg" column="del_flg" />
-		<association property="author"
+		<!--<association property="author"
 			javaType="com.graphql.demo.graphqldemo.dto.Author">
 			<id property="id" column="id" />
 			<result property="age" column="age" />
 			<result property="sex" column="sex" />
 			<result property="authorName" column="author_name" />
 			<result property="delFlg" column="del_flg" />
-		</association>
+		</association>-->
 	</resultMap>
 
 	<select id="getBookById" parameterType="java.lang.String"
 		resultType="com.graphql.demo.graphqldemo.dto.Book"
 		resultMap="bookResultMap">
 
-		select
+		<!-- select
 		A.*,B.*
 		from book A
 		inner join author B on A.author_id = B.id and
 		B.del_flg = 0
-		where A.del_flg = 0 and A.id = #{id}
+		where A.del_flg = 0 and A.id = #{id} -->
+		
+		select *
+		from book
+		where del_flg = 0 and id = #{id}
 
 	</select>
 
 	<select id="getAllBooks" resultType="java.util.List"
 		resultMap="bookResultMap">
 
-		select
+		<!-- select
 		A.*,B.*
 		from book A
 		inner join author B on A.author_id = B.id and
 		B.del_flg = 0
-		where A.del_flg = 0
+		where A.del_flg = 0 -->
+		
+		select *
+		from book
+		where del_flg = 0;
 
 	</select>
 
@@ -55,6 +63,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from book
 		where del_flg = 0 and author_id = #{id}
 
+	</select>
+	
+	<select id="getAllBooksOfAuthorByIds" parameterType="java.util.List" resultType="java.util.List" resultMap="bookResultMap">
+		select *
+		from book
+		where del_flg = 0 and author_id in
+		<foreach item="item" collection="list" separator="," open="(" close=")" index="">
+			#{item}
+		</foreach>
 	</select>
 
 	<insert id="addBook" useGeneratedKeys="true" keyProperty="id"
