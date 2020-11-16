@@ -1,6 +1,7 @@
 package com.graphql.demo.graphqldemo.controller;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import com.graphql.demo.graphqldemo.dataLoader.DataLoaderInit;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import graphql.GraphQLError;
+import graphql.validation.ValidationError;
 
 /**
  * GraphQL Controller
@@ -77,6 +80,7 @@ public class GraphQLController {
 		if (resultMap.containsKey("extensions")) {
 			resultMap.remove("extensions");
 		}
+		List<GraphQLError> errors = executionResult.getErrors();
 		return resultMap;
 	}
 
