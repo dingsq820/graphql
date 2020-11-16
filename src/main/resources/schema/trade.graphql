@@ -1,0 +1,221 @@
+type Query {
+	getTradeInfos(shopId:String!, totalCount:Int, startCount:Int,startDate:String!, endDate:String!,queryInput:QueryInput) : TradeInfo
+}
+
+input QueryInput {
+	dateType : String
+	secureSegment : String
+	orderStatus : String
+	orderStatus2 : String
+	ordererName : String
+	ordererKana : String
+	mailAddress : String
+	ordererPhoneNumber1 : String
+	nickName : String
+	senderName : String
+	senderKana : String
+	senderPhoneNumber1 : String
+	hasOrderMemo : String
+	lotNumber : Int
+	itemManagementId : String
+	itemCode : String
+	itemName : String
+	sellMethodSegment : String
+	settlementId : String
+	cardStatus : String
+	cvsStatus : String
+	cvsExpire : String
+	atmStatus : String
+	netBankingStatus : String
+	carrerStatus : String
+	auPaymentStatus : String
+	yuttariPostpayStatus : String
+	deliveryMethodId : String
+	deliveryId : String
+	deliveryDayRequest : String
+	device : String
+	hasUserComment : String
+	hasRequestGiftNoshi : String
+	hasUsePoint : String
+	hasCoupon : String
+	giftPointStatus : String
+	isWowmaMember : String
+	premiumType : String
+	isReducedTax : String
+	getRawMailAddress : String
+}
+
+type TradeInfo {
+	result : Result
+	resultCount : Int
+	orderInfo : [OrderInfo]
+}
+
+type Result {
+	status : String
+	error : Error
+}
+
+type Error {
+	code : String
+	message : String
+}
+
+type OrderInfo {
+	orderDate : String
+	orderId : Int
+	sellMethodSegment : String
+	releaseDate : String
+	siteAndDevice : String
+	crossBorderEcTradeKbn : String
+	mailAddress : String
+	rawMailAddress : String
+	ordererName : String
+	ordererKana : String
+	ordererZipCode : String
+	ordererAddress : String
+	ordererPhoneNumber1 : String
+	ordererPhoneNumber2 : String
+	nickName : String
+	senderName : String
+	senderKana : String
+	senderZipCode : String
+	senderAddress : String
+	senderPhoneNumber1 : String
+	senderPhoneNumber2 : String
+	senderShopCd : String
+	orderOption : String
+	settlementName : String
+	secureSegment : String
+	userCommnet : String
+	tradeRemarks : String
+	memo : String
+	orderStatus : String
+	contactStatus : String
+	contactDate : String
+	authorizationStatus : String
+	authorizationDate : String
+	paymentStatus : String
+	paymentDate : String
+	shipStatus : String
+	shipDate : String
+	printStatus : String
+	printDate : String
+	cancelStatus : String
+	cancelReason : String
+	cancelComment : String
+	cancelDate : String
+	detail : [Detail]
+	totalSalePrice : Int
+	totalSalePriceNormalTax : Int
+	totalSalePriceReducedTax : Int
+	totalSalePriceNoTax : Int
+	totalSaleUnit : Int
+	postagePrice : Int
+	postagePriceTaxRate : String
+	chargePrice : Int
+	chargePriceTaxRate : String
+	totalItemOptionPrice : Int
+	totalItemOptionPriceTaxRate : String
+	totalGiftWrappingPrice : Int
+	totalGiftWrappingPriceTaxRate : String
+	totalPrice : Int
+	totalPriceNormalTax : Int
+	totalPriceReducedTax : Int
+	totalPriceNoTax : Int
+	premiumType : String
+	premiumIssuePrice : Int
+	premiumMallPrice : Int
+	premiumShopPrice : Int
+	couponTotalPrice : Int
+	couponTotalPriceNormalTax : Int
+	couponTotalPriceReducedTax : Int
+	couponTotalPriceNoTax : Int
+	usePoint : Int
+	usePointNormalTax : Int
+	usePointReducedTax : Int
+	usePointNoTax : Int
+	usePointCancel : String
+	useAuPointPrice : Int
+	useAuPointPriceNormalTax : Int
+	useAuPointPriceReducedTax : Int
+	useAuPointPriceNoTax : Int
+	useAuPoint : Int
+	useAuPointCancel : String
+	requestPrice : Int
+	requestPriceNormalTax : Int
+	requestPriceReducedTax : Int
+	requestPriceNoTax : Int
+	pointFixedDate : String
+	pointFixedStatus : String
+	settleStatus : String
+	authoriTimelimitDate : String
+	pgResult : String
+	pgResponseCode : String
+	pgResponseDetail : String
+	pgOrderId : String
+	pgRequestPrice : Int
+	pgRequestPriceNormalTax : Int
+	pgRequestPriceReducedTax : Int
+	pgRequestPriceNoTax : Int
+	couponType : String
+	couponKey : String
+	cardjadgement : String
+	deliveryName : String
+	deliveryMethodId : String
+	deliveryId : String
+	elecReceiptIssueStatus : String
+	elecReceiptIssueTimes : Int
+	deliveryRequestDay : String
+	deliveryRequestTime : String
+	shippingDate : String
+	shippingCarrier : String
+	shippingNumber : String
+	yamatoLnkMgtNo : String
+	eposTokenId : String
+	affId : String
+}
+
+type Detail {
+	orderDetailId : Int
+	itemManagementId : String
+	itemCode : String
+	lotNumber : Int
+	itemName : String
+	itemOption : String
+	itemOptionCommissions : [ItemOptionCommissions]
+	itemOptionPrice : Int
+	giftWrappingType : String
+	giftWrappingPrice : Int
+	giftMessage : String
+	noshiType : String
+	noshiPresenterName1 : String
+	noshiPresenterName2 : String
+	noshiPresenterName3 : String
+	itemCancelStatus : String
+	itemCancelDate : String
+	beforeDiscount : Int
+	discount : Int
+	itemPrice : Int
+	unit : Int
+	totalItemPrice : Int
+	totalItemChargePrice : Int
+	taxType : String
+	reducedTax : String
+	taxRate : String
+	giftPoint : Int
+	shippingDayDispText : String
+	shippingTimelimitDate : String
+}
+
+type ItemOptionCommissions {
+	itemOptionCommissionTitle : String
+	itemOptionCommissionVal : [ItemOptionCommissionVal]
+	itemOptionCommissionSeq : Int
+}
+
+type ItemOptionCommissionVal {
+	itemOptionCommission : String
+	itemOptionCommissionPrice : Int
+	itemOptionCommissionValSeq : Int
+}

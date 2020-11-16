@@ -10,6 +10,11 @@ import com.graphql.demo.graphqldemo.dao.AuthorDao;
 import com.graphql.demo.graphqldemo.dao.BookDao;
 import com.graphql.demo.graphqldemo.dto.Author;
 import com.graphql.demo.graphqldemo.dto.Book;
+import com.graphql.demo.graphqldemo.handler.TradeInfoHandler;
+import com.graphql.demo.graphqldemo.model.Error;
+import com.graphql.demo.graphqldemo.model.QueryInput;
+import com.graphql.demo.graphqldemo.model.Result;
+import com.graphql.demo.graphqldemo.model.TradeInfo;
 
 import lombok.AllArgsConstructor;
 
@@ -24,6 +29,9 @@ public class QueryResolver implements GraphQLQueryResolver {
 	// Author DAO
 	@Autowired
 	AuthorDao authorDao;
+	
+	@Autowired
+	private TradeInfoHandler tradeInfoHandler;
 
 	/**
 	 * Get Book
@@ -77,5 +85,22 @@ public class QueryResolver implements GraphQLQueryResolver {
 	 */
 	public List<Book> getBooksOfAuthorById(String id) {
 		return bookDao.getAllBooksOfAuthorById(id);
+	}
+
+	public TradeInfo getTradeInfos(String shopId, Integer totalCount, Integer startCount, String startDate,
+			String endDate, QueryInput queryInput) {
+
+		TradeInfo tradeInfo = new TradeInfo();
+		Result result = new Result();
+		Error error = new Error();
+		boolean checkResult = tradeInfoHandler.doCheck(shopId, totalCount, startCount, startDate, endDate, queryInput,error);
+		if (!checkResult) {
+			result.setStatus("1");
+			result.setError(error);
+			tradeInfo.setResult(result);
+		}
+		
+
+		return tradeInfo;
 	}
 }

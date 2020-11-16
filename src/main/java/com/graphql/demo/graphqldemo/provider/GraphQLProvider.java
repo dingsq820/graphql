@@ -48,7 +48,7 @@ public class GraphQLProvider {
 	@PostConstruct
 	public void init() throws IOException {
 
-		GraphQLSchema schema = SchemaParser.newParser().file("schema/schema.graphql")
+		GraphQLSchema schema = SchemaParser.newParser().files("schema/schema.graphql", "schema/trade.graphql")
 				.resolvers(queryResolver, bookResolver, authorResolver, mutationResolver, subscriptionResolver).build()
 				.makeExecutableSchema();
 

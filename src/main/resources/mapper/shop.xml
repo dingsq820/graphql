@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.graphql.demo.graphqldemo.dao.ShopDao">
+
+	<select id="getShopInfo" parameterType="java.lang.String" resultType="com.graphql.demo.graphqldemo.entity.Shop">
+
+		select *
+		from shop
+		where shop_id = #{shopId} and del_flg = 0;
+
+	</select>
+</mapper>
