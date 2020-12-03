@@ -55,4 +55,6 @@ public interface AuthorDao {
 	 * @param id
 	 */
 	public void deleteAuthor(@Param("id") String id);
+	
+	public List<Author> getAuthorsTmp();
 }

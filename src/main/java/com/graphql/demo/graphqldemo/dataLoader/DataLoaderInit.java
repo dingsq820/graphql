@@ -7,7 +7,9 @@ import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 import org.dataloader.BatchLoader;
+import org.dataloader.CacheMap;
 import org.dataloader.DataLoader;
+import org.dataloader.DataLoaderOptions;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ import com.graphql.demo.graphqldemo.dao.AuthorDao;
 import com.graphql.demo.graphqldemo.dao.BookDao;
 import com.graphql.demo.graphqldemo.dto.Author;
 import com.graphql.demo.graphqldemo.dto.Book;
+
+import kotlin.reflect.jvm.internal.impl.resolve.scopes.receivers.ThisClassReceiver;
 
 @Component
 public class DataLoaderInit {
@@ -89,7 +93,42 @@ public class DataLoaderInit {
 				});
 			}
 		};
+//		
+		CacheMap<String, Object> cacheMap = new CacheMap<String, Object>() {
 
+			@Override
+			public boolean containsKey(String key) {
+				return true;
+			}
+
+			@Override
+			public Object get(String key) {
+				
+				return null;
+			}
+
+			@Override
+			public CacheMap<String, Object> set(String key, Object value) {
+				return this;
+			}
+
+			@Override
+			public CacheMap<String, Object> delete(String key) {
+				return null;
+			}
+
+			@Override
+			public CacheMap<String, Object> clear() {
+				return null;
+			}
+
+		};
+//		
+//		
+		DataLoaderOptions dataLoaderOptions = DataLoaderOptions.newOptions();
+		dataLoaderOptions.setCacheMap(cacheMap);
+
+//		DataLoader<String, List<Book>> bookLoader = DataLoader.newDataLoader(bookBatchLoader, dataLoaderOptions);
 		DataLoader<String, List<Book>> bookLoader = DataLoader.newDataLoader(bookBatchLoader);
 
 		return bookLoader;

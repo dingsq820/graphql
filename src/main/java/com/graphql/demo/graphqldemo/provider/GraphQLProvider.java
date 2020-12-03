@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 import com.coxautodev.graphql.tools.SchemaParser;
 import com.graphql.demo.graphqldemo.resolver.AuthorResolver;
 import com.graphql.demo.graphqldemo.resolver.BookResolver;
-import com.graphql.demo.graphqldemo.resolver.MutationResolver;
 import com.graphql.demo.graphqldemo.resolver.QueryResolver;
-import com.graphql.demo.graphqldemo.resolver.SubscriptionResolver;
 
 import graphql.GraphQL;
 import graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentation;
@@ -34,11 +32,11 @@ public class GraphQLProvider {
 	@Autowired
 	private BookResolver bookResolver;
 
-	@Autowired
-	private MutationResolver mutationResolver;
-
-	@Autowired
-	private SubscriptionResolver subscriptionResolver;
+//	@Autowired
+//	private MutationResolver mutationResolver;
+//
+//	@Autowired
+//	private SubscriptionResolver subscriptionResolver;
 
 	@Bean
 	public GraphQL graphQL() {
@@ -48,8 +46,8 @@ public class GraphQLProvider {
 	@PostConstruct
 	public void init() throws IOException {
 
-		GraphQLSchema schema = SchemaParser.newParser().files("schema/schema.graphql", "schema/trade.graphql")
-				.resolvers(queryResolver, bookResolver, authorResolver, mutationResolver, subscriptionResolver).build()
+		GraphQLSchema schema = SchemaParser.newParser().files("schema/schema.graphqls")
+				.resolvers(queryResolver, bookResolver, authorResolver).build()
 				.makeExecutableSchema();
 
 		DataLoaderDispatcherInstrumentationOptions options = DataLoaderDispatcherInstrumentationOptions.newOptions()
@@ -57,7 +55,10 @@ public class GraphQLProvider {
 
 		DataLoaderDispatcherInstrumentation dispatcherInstrumentation = new DataLoaderDispatcherInstrumentation(
 				options);
+		
+		
 
+//		Cache<String, PreparsedDocumentEntry> cache = null;
 		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation).build();
 
 //		this.graphQL = GraphQL.newGraphQL(schema).instrumentation(dispatcherInstrumentation)

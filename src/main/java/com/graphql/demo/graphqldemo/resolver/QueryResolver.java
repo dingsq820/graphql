@@ -41,6 +41,12 @@ public class QueryResolver implements GraphQLQueryResolver {
 	 */
 	public Book getBook(String id) {
 
+//		RestAssured.baseURI="";
+//		RestAssured.port=80;
+//		RequestSpecification reqspec = given().header("", "").header("","").when();
+//		Response response = reqspec.get().andReturn();
+//		JAXB.unmarshal(new StringReader(response.asString()),Book.class);
+		
 		Book book = bookDao.getBookById(id);
 		return book;
 	}
@@ -76,6 +82,14 @@ public class QueryResolver implements GraphQLQueryResolver {
 		List<Author> authors = authorDao.getAllAuthors();
 		return authors;
 	}
+	
+	public List<Author> getAuthorsTmp() {
+		
+//		return authorDao.getAuthorsTmp();
+		
+		return authorDao.getAllAuthors();
+	}
+	
 
 	/**
 	 * Get Books of Author By Author ID

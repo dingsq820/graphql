@@ -1,0 +1,55 @@
+type Book {
+	id : ID!
+	name : String!
+	pageCount : Int!
+	author : Author
+}
+
+type Author {
+	id : ID!
+	age : Int @deprecated (reason: "It's secret")
+	sex : String
+	authorName : String
+	books : [Book]
+}
+
+type Query {
+	getBook(id: ID!) : Book
+	getBooks : [Book]
+	getAuthor(id: ID!) : Author
+	#getAuthors : [Author]
+	#getBooksOfAuthorById(id : ID!) : [Book]
+	#getAuthors : [AuthorBook]
+	#getAuthorsTmp : [Author]
+}
+
+#type Mutation {
+#	addBook(input : BookInput) : Book
+#	updateBook(id : ID!, input : BookInput!):Book
+#	deleteBook(id : ID!) : Book
+#	addAuthor(input : AuthorInput) : Author
+#	updateAuthor(id : ID!, input : AuthorInput!) : Author
+#	#deleteAuthor(id : ID!) : Author
+#}
+
+#input BookInput {
+#	bookName : String
+#	pageCount : Int
+#	authorId : Int
+#}
+
+#input AuthorInput {
+#	age : Int
+#	sex : String
+#	authorName : String
+#}
+
+#input AuthorBook {
+#	author : Author
+#	books : [Book]
+#}
+
+#type Subscription {
+#	newBookAdded : Book
+#}
+

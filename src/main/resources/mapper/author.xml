@@ -11,14 +11,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="sex" column="sex" />
 		<result property="authorName" column="author_name" />
 		<result property="delFlg" column="del_flg" />
-		<!-- <collection property="books" ofType="com.graphql.demo.graphqldemo.dto.Book">
+	</resultMap>
+	
+	<select id="getAllAuthors" resultType="java.util.List"
+	resultMap="authorResultMap">
+		
+		select *
+		from author
+		where del_flg = 0;
+
+	</select>
+	
+	<resultMap id="authorResultMapTmp"
+		type="com.graphql.demo.graphqldemo.dto.Author">
+		<id property="id" column="id" />
+		<result property="age" column="age" />
+		<result property="sex" column="sex" />
+		<result property="authorName" column="author_name" />
+		<result property="delFlg" column="del_flg" />
+		<collection property="books" ofType="com.graphql.demo.graphqldemo.dto.Book">
 			<id property="id" column="book_id" />
 			<result property="name" column="name" />
 			<result property="pageCount" column="page_count" />
 			<result property="authorId" column="author_id" />
 			<result property="delFlg" column="del_flg" />
-		</collection> -->
+		</collection>
 	</resultMap>
+	
+	<select id="getAuthorsTmp" resultType="com.graphql.demo.graphqldemo.dto.Author" resultMap="authorResultMapTmp">
+		<!-- select A.id,A.age,A.sex,A.author_name,A.del_flg,B.id as book_id, B.name, B.page_count,B.author_id,B.del_flg
+		from author A left join book B on A.id = B.author_id and B.del_flg = 0
+		where A.del_flg = 0; -->
+	</select>
 
 	<select id="getAuthorById" parameterType="java.lang.String"
 		resultType="com.graphql.demo.graphqldemo.dto.Author"
@@ -46,19 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	</select>
 
-	<select id="getAllAuthors" resultType="java.util.List"
-		resultMap="authorResultMap">
 
-		<!-- select
-		A.*,B.id as book_id,B.name,B.page_count,B.author_id,B.del_flg
-		from author A left join book B on A.id = B.author_id and B.del_flg = 0
-		where A.del_flg = 0 -->
-		
-		select *
-		from author
-		where del_flg = 0;
-
-	</select>
 
 
 	<insert id="addAuthor" useGeneratedKeys="true" keyProperty="id"

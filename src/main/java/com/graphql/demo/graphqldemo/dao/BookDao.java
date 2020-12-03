@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.graphql.demo.graphqldemo.dto.Book;
 
 @Component
 @Mapper
+@CacheConfig(cacheNames = "books")
 public interface BookDao {
 
 	/**
@@ -18,6 +21,8 @@ public interface BookDao {
 	 * @param id
 	 * @return Book
 	 */
+//	@Cacheable(cacheNames = {"book"}, key = "#result.id")
+//	@Cacheable(value = "book#${select.cache.timeout:1000}", key = "#result.id")
 	public Book getBookById(@Param("id") String id);
 
 	/**
